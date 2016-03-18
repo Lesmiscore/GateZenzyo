@@ -40,7 +40,9 @@ public class Server {
 	public Server(String[] args) throws SocketException {
 		this.args = args;
 		OptionParser op = new OptionParser();
+		op.accepts("ip").withRequiredArg();
 		op.accepts("port").withRequiredArg();
+		op.accepts("bind-port").withRequiredArg();
 
 		OptionSet os = op.parse(args);
 		if (os.has("ip")) {
