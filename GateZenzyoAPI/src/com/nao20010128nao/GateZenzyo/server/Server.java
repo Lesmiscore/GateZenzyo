@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.SocketException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.nao20010128nao.GateZenzyo.server.network.gate_zenzyo.DataPacket;
 import com.nao20010128nao.GateZenzyo.server.network.gate_zenzyo.Info;
 
 import joptsimple.OptionParser;
@@ -21,8 +23,9 @@ public class Server {
 	int port;
 	int bindPort = 19132;
 	Map<InetAddress, Connection> connections = new HashMap<>();
+	DatagramSocket ds = null;
 
-	public static void main(String... args) {
+	public static void main(String... args) throws SocketException {
 		System.out.println("  ______                                 _____       _       \r\n"
 				+ " |___  /                                / ____|     | |      \r\n"
 				+ "    / / ___ _ __  _____   _  ___ ______| |  __  __ _| |_ ___ \r\n"
@@ -34,7 +37,7 @@ public class Server {
 		new Server(args);
 	}
 
-	public Server(String[] args) {
+	public Server(String[] args) throws SocketException {
 		this.args = args;
 		OptionParser op = new OptionParser();
 		op.accepts("port").withRequiredArg();
@@ -56,6 +59,9 @@ public class Server {
 			bindPort = new Integer(os.valueOf("bind-port").toString());
 		}
 
+		System.out.println("Binding on port " + bindPort + "...");
+		ds = new DatagramSocket(bindPort);
+
 		new ServerThread().start();
 		new ConnectionCheckThread().start();
 	}
@@ -72,10 +78,7 @@ public class Server {
 	public class ServerThread extends Thread {
 		@Override
 		public void run() {
-			DatagramSocket ds = null;
 			try {
-				System.out.println("Binding on port " + bindPort + "...");
-				ds = new DatagramSocket(bindPort);
 				while (true) {
 					try {
 						DatagramPacket dp = new DatagramPacket(new byte[102400], 102400);
@@ -83,7 +86,7 @@ public class Server {
 						if (connections.containsKey(dp.getAddress())) {
 							connections.get(dp.getAddress()).process(dp);
 						} else {
-							Connection con = new Connection(ip, bindPort, dp.getAddress(), Server.this);
+							Connection con = new Connection(ip, bindPort, dp.getSocketAddress(), Server.this);
 							connections.put(dp.getAddress(), con);
 							con.process(dp);
 						}
@@ -91,7 +94,7 @@ public class Server {
 						e.printStackTrace();
 					}
 				}
-			} catch (IOException e) {
+			} catch (Throwable e) {
 			} finally {
 				if (ds != null)
 					ds.close();
@@ -103,7 +106,25 @@ public class Server {
 		@Override
 		public void run() {
 			// TODO 自動生成されたメソッド・スタブ
-
+			try {
+				while (true) {
+					for (Connection c : connections.values()) {
+						try {
+							DataPacket dp = c.getProcessablePacket();
+							dp.encode();
+							byte[] data = dp.getBuffer();
+							DatagramPacket udp = new DatagramPacket(data, data.length, c.dest);
+							ds.send(udp);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			} catch (Throwable e) {
+			} finally {
+				if (ds != null)
+					ds.close();
+			}
 		}
 	}
 }

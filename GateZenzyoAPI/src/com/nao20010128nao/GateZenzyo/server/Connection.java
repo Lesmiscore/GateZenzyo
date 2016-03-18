@@ -5,6 +5,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Collections;
@@ -29,7 +30,7 @@ public class Connection {
 	static final int STATUS_SERVER_INFO = 4;
 	static final int STATUS_INGAME = 5;
 
-	InetAddress dest;
+	SocketAddress dest;
 	int status = STATUS_HANDLING;
 	DatagramSocket ds;
 	Server server;
@@ -39,9 +40,9 @@ public class Connection {
 	byte[] supportedCompressions;
 	byte sessionCompression;
 
-	public Connection(String ip, int port, InetAddress destination, Server server)
+	public Connection(String ip, int port, SocketAddress socketAddress, Server server)
 			throws SocketException, UnknownHostException {
-		dest = destination;
+		dest = socketAddress;
 		ds = new DatagramSocket(new InetSocketAddress(InetAddress.getByName(ip), port));
 		this.server = server;
 	}
