@@ -1,4 +1,4 @@
-package com.nao20010128nao.MCProxy;
+package com.nao20010128nao.GateZenzyo.server;
 
 import java.io.Closeable;
 import java.io.IOException;

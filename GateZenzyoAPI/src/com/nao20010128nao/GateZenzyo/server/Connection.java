@@ -1,4 +1,4 @@
-package com.nao20010128nao.MCProxy;
+package com.nao20010128nao.GateZenzyo.server;
 
 import java.io.IOException;
 import java.net.BindException;
