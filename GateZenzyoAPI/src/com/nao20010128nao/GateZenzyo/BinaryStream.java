@@ -4,6 +4,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.UUID;
 
+import com.nao20010128nao.GateZenzyo.common.minecraft.Skin;
+
 /**
  * author: MagicDroidX Nukkit Project
  */

@@ -2,7 +2,7 @@ package com.nao20010128nao.GateZenzyo.server.network.minecraftpe.protocol;
 
 import java.util.UUID;
 
-import com.nao20010128nao.GateZenzyo.Skin;
+import com.nao20010128nao.GateZenzyo.common.minecraft.Skin;
 
 /**
  * @author Nukkit Project Team

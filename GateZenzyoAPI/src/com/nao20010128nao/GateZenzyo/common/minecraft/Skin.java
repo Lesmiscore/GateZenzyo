@@ -1,4 +1,4 @@
-package com.nao20010128nao.GateZenzyo;
+package com.nao20010128nao.GateZenzyo.common.minecraft;
 
 /**
  * author: MagicDroidX Nukkit Project

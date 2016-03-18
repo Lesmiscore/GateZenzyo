@@ -1,4 +1,4 @@
-package com.nao20010128nao.GateZenzyo.server;
+package com.nao20010128nao.GateZenzyo.common.data;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
