@@ -14,8 +14,7 @@ public class Info {
 	public static final byte SUPPORTED_COMPRESSIONS_NONE = 0;
 	public static final byte SUPPORTED_COMPRESSIONS_GZIP = 1;
 	public static final byte SUPPORTED_COMPRESSIONS_DEFLATE = 2;
-	public static final byte SUPPORTED_COMPRESSIONS_LZMA = 3;
-	public static final byte SUPPORTED_COMPRESSIONS_LZ4 = 4;
+	public static final byte SUPPORTED_COMPRESSIONS_LZ4 = 3;
 
 	private Info() {
 	}

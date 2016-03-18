@@ -42,4 +42,10 @@ public abstract class DataPacket extends com.nao20010128nao.GateZenzyo.server.ne
 		dp.setOffset(0);
 		return dp;
 	}
+
+	public static DataPacket createPacketForReceived(byte[] buf, int off, int len) {
+		byte[] data = new byte[len];
+		System.arraycopy(buf, off, data, 0, len);
+		return createPacketForReceived(data);
+	}
 }
