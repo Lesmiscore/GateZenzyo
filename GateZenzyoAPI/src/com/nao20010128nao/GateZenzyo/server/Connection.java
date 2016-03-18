@@ -12,10 +12,12 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import com.nao20010128nao.GateZenzyo.common.compressor.Compressor;
 import com.nao20010128nao.GateZenzyo.server.network.gate_zenzyo.ClientInfoPacket;
 import com.nao20010128nao.GateZenzyo.server.network.gate_zenzyo.ConnectionHandleAcceptedPacket;
 import com.nao20010128nao.GateZenzyo.server.network.gate_zenzyo.DataPacket;
 import com.nao20010128nao.GateZenzyo.server.network.gate_zenzyo.HandleConnectionPacket;
+import com.nao20010128nao.GateZenzyo.server.network.gate_zenzyo.MinecraftPacket;
 import com.nao20010128nao.GateZenzyo.server.network.gate_zenzyo.ServerInfoPacket;
 
 public class Connection {
@@ -90,6 +92,17 @@ public class Connection {
 				throw new IllegalArgumentException("Unexpected packet: " + dp.getClass().getName());
 			}
 			break;
+		case STATUS_INGAME:
+			if (dp instanceof MinecraftPacket) {
+				dp.decode();
+				byte[] data = Compressor.getCompressor(sessionCompression)
+						.decompress(((MinecraftPacket) dp).compressedData);
+				ds.send(new DatagramPacket(data, data.length));
+			} else {
+				status = -1;
+				throw new IllegalArgumentException("Unexpected packet: " + dp.getClass().getName());
+			}
+			break;
 		}
 	}
 
@@ -113,7 +126,9 @@ public class Connection {
 			ds.receive(dp);
 			byte[] data = new byte[dp.getLength()];
 			System.arraycopy(dp.getData(), dp.getLength(), data, 0, data.length);
-
+			MinecraftPacket mp = new MinecraftPacket();
+			mp.compressedData = Compressor.getCompressor(sessionCompression).compress(data);
+			return mp;
 		}
 		return null;
 	}

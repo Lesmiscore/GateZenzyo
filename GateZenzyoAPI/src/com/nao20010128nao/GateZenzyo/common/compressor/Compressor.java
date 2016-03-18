@@ -25,4 +25,8 @@ public abstract class Compressor {
 		instances.put(Info.SUPPORTED_COMPRESSIONS_GZIP, new GzipComressor());
 		instances.put(Info.SUPPORTED_COMPRESSIONS_LZ4, new Lz4Comressor());
 	}
+
+	public static Compressor getCompressor(byte id) {
+		return instances.get(id);
+	}
 }
