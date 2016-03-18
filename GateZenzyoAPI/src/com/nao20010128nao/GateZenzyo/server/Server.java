@@ -10,7 +10,7 @@ import java.util.Map;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 
-public class Server extends Thread {
+public class Server {
 	String[] args;
 	int port = 19132;
 	Map<InetAddress, Connection> connections = new HashMap<>();
@@ -24,7 +24,7 @@ public class Server extends Thread {
 				+ " /_____\\___|_| |_/___|\\__, |\\___/       \\_____|\\__,_|\\__\\___|\r\n"
 				+ "                       __/ |                                 \r\n"
 				+ "                      |___/                                  ");
-		new Server(args).start();
+		new Server(args);
 	}
 
 	public Server(String[] args) {
@@ -38,25 +38,30 @@ public class Server extends Thread {
 		}
 	}
 
-	@Override
-	public void run() {
-		DatagramSocket ds = null;
-		try {
-			System.out.println("Binding on port " + port + "...");
-			ds = new DatagramSocket(port);
-			while (true) {
-				DatagramPacket dp = new DatagramPacket(new byte[102400], 102400);
-				ds.receive(dp);
-				if (connections.containsKey(dp.getAddress())) {
-					connections.get(dp.getAddress()).process(dp);
-				} else {
+	public class ServerThread extends Thread {
+		@Override
+		public void run() {
+			DatagramSocket ds = null;
+			try {
+				System.out.println("Binding on port " + port + "...");
+				ds = new DatagramSocket(port);
+				while (true) {
+					DatagramPacket dp = new DatagramPacket(new byte[102400], 102400);
+					ds.receive(dp);
+					if (connections.containsKey(dp.getAddress())) {
+						connections.get(dp.getAddress()).process(dp);
+					} else {
 
+					}
 				}
+			} catch (IOException e) {
+			} finally {
+				if (ds != null)
+					ds.close();
 			}
-		} catch (IOException e) {
-		} finally {
-			if (ds != null)
-				ds.close();
 		}
+	}
+
+	public class ConnectionCheckThread extends Thread {
 	}
 }
