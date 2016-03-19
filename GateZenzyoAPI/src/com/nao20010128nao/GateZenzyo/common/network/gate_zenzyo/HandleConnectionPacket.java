@@ -5,6 +5,7 @@ import java.util.UUID;
 public class HandleConnectionPacket extends DataPacket {
 	public String clientName, device;
 	public UUID clientUUID;
+	public int protocolId;
 
 	public HandleConnectionPacket() {
 		// TODO 自動生成されたコンストラクター・スタブ
@@ -20,6 +21,7 @@ public class HandleConnectionPacket extends DataPacket {
 	public void decode() {
 		// TODO 自動生成されたメソッド・スタブ
 		getSignedByte();
+		protocolId = getInt();
 		clientName = getString();
 		device = getString();
 		clientUUID = getUUID();
@@ -29,6 +31,7 @@ public class HandleConnectionPacket extends DataPacket {
 	public void encode() {
 		// TODO 自動生成されたメソッド・スタブ
 		putByte(pid());
+		putInt(protocolId);
 		putString(clientName);
 		putString(device);
 		putUUID(clientUUID);

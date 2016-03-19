@@ -20,6 +20,7 @@ import com.nao20010128nao.GateZenzyo.common.network.gate_zenzyo.ConnectionHandle
 import com.nao20010128nao.GateZenzyo.common.network.gate_zenzyo.DataPacket;
 import com.nao20010128nao.GateZenzyo.common.network.gate_zenzyo.DisconnectPacket;
 import com.nao20010128nao.GateZenzyo.common.network.gate_zenzyo.HandleConnectionPacket;
+import com.nao20010128nao.GateZenzyo.common.network.gate_zenzyo.Info;
 import com.nao20010128nao.GateZenzyo.common.network.gate_zenzyo.MinecraftPacket;
 import com.nao20010128nao.GateZenzyo.common.network.gate_zenzyo.ServerInfoPacket;
 
@@ -67,6 +68,9 @@ public class Connection {
 					status = STATUS_CON_NG;
 				} else {
 					status = STATUS_CON_OK_UNSENT;
+				}
+				if (((HandleConnectionPacket) dp).protocolId != Info.CURRENT_PROTOCOL_ID) {
+					status = STATUS_CON_NG;
 				}
 			} else {
 				status = -1;

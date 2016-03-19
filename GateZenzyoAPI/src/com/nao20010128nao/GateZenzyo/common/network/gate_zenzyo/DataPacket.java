@@ -1,5 +1,6 @@
 package com.nao20010128nao.GateZenzyo.common.network.gate_zenzyo;
 
+import java.net.DatagramPacket;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,5 +48,9 @@ public abstract class DataPacket extends com.nao20010128nao.GateZenzyo.common.ne
 		byte[] data = new byte[len];
 		System.arraycopy(buf, off, data, 0, len);
 		return createPacketForReceived(data);
+	}
+
+	public static DataPacket createPacketForReceived(DatagramPacket dp) {
+		return createPacketForReceived(dp.getData(), dp.getOffset(), dp.getLength());
 	}
 }

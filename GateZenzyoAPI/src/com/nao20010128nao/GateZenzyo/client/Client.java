@@ -1,49 +1,55 @@
-package com.nao20010128nao.GateZenzyo.server;
+package com.nao20010128nao.GateZenzyo.client;
 
-import java.io.IOException;
+import java.io.File;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
-import com.nao20010128nao.GateZenzyo.common.network.gate_zenzyo.DataPacket;
+import com.nao20010128nao.GateZenzyo.common.Utils;
 import com.nao20010128nao.GateZenzyo.common.network.gate_zenzyo.Info;
 
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 
-public class Server {
+public class Client {
 	public static final byte[] SUPPORTED_COMPRESSIONS = new byte[] { Info.SUPPORTED_COMPRESSIONS_NONE,
 			Info.SUPPORTED_COMPRESSIONS_GZIP, Info.SUPPORTED_COMPRESSIONS_DEFLATE, Info.SUPPORTED_COMPRESSIONS_LZ4 };
 
 	String[] args;
-	String ip;
+	String ip, name, device;
 	int port;
 	int bindPort = 19132;
 	Map<InetAddress, Connection> connections = new HashMap<>();
 	DatagramSocket ds = null;
+	Connection con;
+	InetSocketAddress sockAddr;
+	UUID uuid;
 
 	public static void main(String... args) throws SocketException {
-		System.out.println(
-				"  ______                                 _____       _          _____                          \r\n"
-						+ " |___  /                                / ____|     | |        / ____|                         \r\n"
-						+ "    / / ___ _ __  _____   _  ___ ______| |  __  __ _| |_ ___  | (___   ___ _ ____   _____ _ __ \r\n"
-						+ "   / / / _ \\ '_ \\|_  / | | |/ _ \\______| | |_ |/ _` | __/ _ \\  \\___ \\ / _ \\ '__\\ \\ / / _ \\ '__|\r\n"
-						+ "  / /_|  __/ | | |/ /| |_| | (_) |     | |__| | (_| | ||  __/  ____) |  __/ |   \\ V /  __/ |   \r\n"
-						+ " /_____\\___|_| |_/___|\\__, |\\___/       \\_____|\\__,_|\\__\\___| |_____/ \\___|_|    \\_/ \\___|_|   \r\n"
-						+ "                       __/ |                                                                   \r\n"
-						+ "                      |___/                                                                    ");
-		new Server(args);
+		System.out
+				.println("  ______                                 _____       _          _____ _ _            _   \r\n"
+						+ " |___  /                                / ____|     | |        / ____| (_)          | |  \r\n"
+						+ "    / / ___ _ __  _____   _  ___ ______| |  __  __ _| |_ ___  | |    | |_  ___ _ __ | |_ \r\n"
+						+ "   / / / _ \\ '_ \\|_  / | | |/ _ \\______| | |_ |/ _` | __/ _ \\ | |    | | |/ _ \\ '_ \\| __|\r\n"
+						+ "  / /_|  __/ | | |/ /| |_| | (_) |     | |__| | (_| | ||  __/ | |____| | |  __/ | | | |_ \r\n"
+						+ " /_____\\___|_| |_/___|\\__, |\\___/       \\_____|\\__,_|\\__\\___|  \\_____|_|_|\\___|_| |_|\\__|\r\n"
+						+ "                       __/ |                                                             \r\n"
+						+ "                      |___/                                                              ");
+		new Client(args);
 	}
 
-	public Server(String[] args) throws SocketException {
+	public Client(String[] args) throws SocketException {
 		this.args = args;
 		OptionParser op = new OptionParser();
 		op.accepts("ip").withRequiredArg();
 		op.accepts("port").withRequiredArg();
+		op.accepts("name").withRequiredArg();
 		op.accepts("bind-port").withRequiredArg();
 
 		OptionSet os = op.parse(args);
@@ -59,15 +65,32 @@ public class Server {
 			System.err.println("port is not set!");
 			System.exit(0);
 		}
+		if (os.has("name")) {
+			name = os.valueOf("name").toString();
+		} else {
+			System.err.println("name is not set!");
+			System.exit(0);
+		}
 		if (os.has("bind-port")) {
 			bindPort = new Integer(os.valueOf("bind-port").toString());
 		}
+		if (new File(".uuid.txt").exists()) {
+			String str = Utils.readWholeFile(new File(".uuid.txt"));
+			uuid = UUID.fromString(str);
+		} else {
+			uuid = UUID.randomUUID();
+			Utils.writeToFile(new File(".uuid.txt"), uuid.toString());
+		}
+
+		sockAddr = new InetSocketAddress(ip, port);
 
 		System.out.println("Binding on port " + bindPort + "...");
 		ds = new DatagramSocket(bindPort);
 
 		new ServerThread().start();
 		new ConnectionCheckThread().start();
+
+		System.out.println("Connect your Minecraft:PE at: " + bindPort + "!");
 	}
 
 	public void removeEntry(Connection con) {
@@ -90,7 +113,7 @@ public class Server {
 						if (connections.containsKey(dp.getAddress())) {
 							connections.get(dp.getAddress()).process(dp);
 						} else {
-							Connection con = new Connection(ip, port, dp.getSocketAddress(), Server.this);
+							Connection con = new Connection(ip, port, dp.getSocketAddress(), Client.this);
 							connections.put(dp.getAddress(), con);
 							con.process(dp);
 						}
@@ -112,18 +135,14 @@ public class Server {
 			// TODO 自動生成されたメソッド・スタブ
 			try {
 				while (true) {
-					for (Connection c : connections.values()) {
-						try {
-							DataPacket dp = c.getProcessablePacket();
-							dp.encode();
-							byte[] data = dp.getBuffer();
-							DatagramPacket udp = new DatagramPacket(data, data.length, c.dest);
-							ds.send(udp);
-						} catch (SocketTimeoutException ste) {
-							// ignore
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
+					try {
+						byte[] data = con.getProcessablePacket();
+						DatagramPacket udp = new DatagramPacket(data, data.length, con.dest);
+						ds.send(udp);
+					} catch (SocketTimeoutException ste) {
+						// ignore
+					} catch (Throwable e) {
+						e.printStackTrace();
 					}
 				}
 			} catch (Throwable e) {

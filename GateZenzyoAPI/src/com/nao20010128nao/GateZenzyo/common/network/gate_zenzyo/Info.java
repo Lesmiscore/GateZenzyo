@@ -17,6 +17,10 @@ public class Info {
 	public static final byte SUPPORTED_COMPRESSIONS_DEFLATE = 2;
 	public static final byte SUPPORTED_COMPRESSIONS_LZ4 = 3;
 
+	/*-******************************************************-*/
+
+	public static final int CURRENT_PROTOCOL_ID = 0;
+
 	private Info() {
 	}
 }
