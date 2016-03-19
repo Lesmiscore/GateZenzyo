@@ -9,8 +9,8 @@ import java.net.SocketTimeoutException;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.nao20010128nao.GateZenzyo.server.network.gate_zenzyo.DataPacket;
-import com.nao20010128nao.GateZenzyo.server.network.gate_zenzyo.Info;
+import com.nao20010128nao.GateZenzyo.common.network.gate_zenzyo.DataPacket;
+import com.nao20010128nao.GateZenzyo.common.network.gate_zenzyo.Info;
 
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;

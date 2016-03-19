@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.InflaterOutputStream;
 
-import com.nao20010128nao.GateZenzyo.server.network.gate_zenzyo.Info;
+import com.nao20010128nao.GateZenzyo.common.network.gate_zenzyo.Info;
 
 public class DeflateComressor extends Compressor {
 

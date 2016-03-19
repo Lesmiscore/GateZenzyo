@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import com.nao20010128nao.GateZenzyo.server.network.gate_zenzyo.Info;
+import com.nao20010128nao.GateZenzyo.common.network.gate_zenzyo.Info;
 
 public class GzipComressor extends Compressor {
 

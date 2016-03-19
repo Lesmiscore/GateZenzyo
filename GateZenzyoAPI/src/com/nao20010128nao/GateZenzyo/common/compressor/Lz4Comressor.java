@@ -4,7 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import com.nao20010128nao.GateZenzyo.server.network.gate_zenzyo.Info;
+import com.nao20010128nao.GateZenzyo.common.network.gate_zenzyo.Info;
 
 import net.jpountz.lz4.LZ4BlockInputStream;
 import net.jpountz.lz4.LZ4BlockOutputStream;

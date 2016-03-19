@@ -3,7 +3,7 @@ package com.nao20010128nao.GateZenzyo.common.compressor;
 import java.io.IOException;
 import java.util.Arrays;
 
-import com.nao20010128nao.GateZenzyo.server.network.gate_zenzyo.Info;
+import com.nao20010128nao.GateZenzyo.common.network.gate_zenzyo.Info;
 
 public class NoneComressor extends Compressor {
 

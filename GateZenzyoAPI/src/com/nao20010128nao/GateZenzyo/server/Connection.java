@@ -15,13 +15,13 @@ import java.util.UUID;
 
 import com.nao20010128nao.GateZenzyo.common.Utils;
 import com.nao20010128nao.GateZenzyo.common.compressor.Compressor;
-import com.nao20010128nao.GateZenzyo.server.network.gate_zenzyo.ClientInfoPacket;
-import com.nao20010128nao.GateZenzyo.server.network.gate_zenzyo.ConnectionHandleAcceptedPacket;
-import com.nao20010128nao.GateZenzyo.server.network.gate_zenzyo.DataPacket;
-import com.nao20010128nao.GateZenzyo.server.network.gate_zenzyo.DisconnectPacket;
-import com.nao20010128nao.GateZenzyo.server.network.gate_zenzyo.HandleConnectionPacket;
-import com.nao20010128nao.GateZenzyo.server.network.gate_zenzyo.MinecraftPacket;
-import com.nao20010128nao.GateZenzyo.server.network.gate_zenzyo.ServerInfoPacket;
+import com.nao20010128nao.GateZenzyo.common.network.gate_zenzyo.ClientInfoPacket;
+import com.nao20010128nao.GateZenzyo.common.network.gate_zenzyo.ConnectionHandleAcceptedPacket;
+import com.nao20010128nao.GateZenzyo.common.network.gate_zenzyo.DataPacket;
+import com.nao20010128nao.GateZenzyo.common.network.gate_zenzyo.DisconnectPacket;
+import com.nao20010128nao.GateZenzyo.common.network.gate_zenzyo.HandleConnectionPacket;
+import com.nao20010128nao.GateZenzyo.common.network.gate_zenzyo.MinecraftPacket;
+import com.nao20010128nao.GateZenzyo.common.network.gate_zenzyo.ServerInfoPacket;
 
 public class Connection {
 	static final int STATUS_CLOSED = -1;
