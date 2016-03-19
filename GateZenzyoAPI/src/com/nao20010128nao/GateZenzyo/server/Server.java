@@ -17,7 +17,7 @@ import joptsimple.OptionSet;
 
 public class Server {
 	public static final byte[] SUPPORTED_COMPRESSIONS = new byte[] { Info.SUPPORTED_COMPRESSIONS_NONE,
-			Info.SUPPORTED_COMPRESSIONS_GZIP, Info.SUPPORTED_COMPRESSIONS_DEFLATE };
+			Info.SUPPORTED_COMPRESSIONS_GZIP, Info.SUPPORTED_COMPRESSIONS_DEFLATE, Info.SUPPORTED_COMPRESSIONS_LZ4 };
 
 	String[] args;
 	String ip;
