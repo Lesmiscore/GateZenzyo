@@ -118,6 +118,7 @@ public class Client {
 							Connection con = new Connection(ip, port, dp.getSocketAddress(), Client.this);
 							connections.put(dp.getAddress(), con);
 							con.process(dp);
+							System.out.println("Connected:" + dp.getSocketAddress());
 						}
 					} catch (Throwable e) {
 						e.printStackTrace();

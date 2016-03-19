@@ -93,6 +93,7 @@ public class Server {
 							Connection con = new Connection(ip, port, dp.getSocketAddress(), Server.this);
 							connections.put(dp.getSocketAddress(), con);
 							con.process(dp);
+							System.out.println("Connected:" + dp.getSocketAddress());
 						}
 					} catch (Throwable e) {
 						e.printStackTrace();
