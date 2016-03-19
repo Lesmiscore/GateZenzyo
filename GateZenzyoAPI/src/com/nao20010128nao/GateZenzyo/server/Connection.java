@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import com.nao20010128nao.GateZenzyo.common.Utils;
 import com.nao20010128nao.GateZenzyo.common.compressor.Compressor;
 import com.nao20010128nao.GateZenzyo.server.network.gate_zenzyo.ClientInfoPacket;
 import com.nao20010128nao.GateZenzyo.server.network.gate_zenzyo.ConnectionHandleAcceptedPacket;
@@ -62,7 +63,7 @@ public class Connection {
 				clientName = ((HandleConnectionPacket) dp).clientName;
 				device = ((HandleConnectionPacket) dp).device;
 				clientUUID = ((HandleConnectionPacket) dp).clientUUID;
-				if (clientName == null || device == null || clientUUID == null) {
+				if (Utils.isNullString(clientName) || Utils.isNullString(device) || clientUUID == null) {
 					status = STATUS_CON_NG;
 				} else {
 					status = STATUS_CON_OK_UNSENT;
