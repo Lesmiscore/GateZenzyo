@@ -3,8 +3,6 @@ package com.nao20010128nao.GateZenzyo.server;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
@@ -46,7 +44,7 @@ public class Connection {
 	public Connection(String ip, int port, SocketAddress socketAddress, Server server)
 			throws SocketException, UnknownHostException {
 		dest = socketAddress;
-		ds = new DatagramSocket(new InetSocketAddress(InetAddress.getByName(ip), port));
+		ds = new DatagramSocket();
 		this.server = server;
 	}
 

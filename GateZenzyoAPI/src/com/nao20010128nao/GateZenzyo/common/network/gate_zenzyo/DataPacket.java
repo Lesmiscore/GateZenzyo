@@ -36,7 +36,7 @@ public abstract class DataPacket extends com.nao20010128nao.GateZenzyo.common.ne
 			dp = packetClasses.get(buf[0]).newInstance();
 		} catch (Throwable e) {
 			// TODO 自動生成された catch ブロック
-			throw new IllegalArgumentException("buf is invalid packet.");
+			throw new IllegalArgumentException("buf is invalid packet.", e);
 		}
 		dp.clean();
 		dp.put(buf);

@@ -24,7 +24,7 @@ public class Client {
 	String[] args;
 	String ip, name, device;
 	int port;
-	int bindPort = 19132;
+	int bindPort = 20000;
 	Map<InetAddress, Connection> connections = new HashMap<>();
 	DatagramSocket ds = null;
 	Connection con;
@@ -81,6 +81,8 @@ public class Client {
 			uuid = UUID.randomUUID();
 			Utils.writeToFile(new File(".uuid.txt"), uuid.toString());
 		}
+		device = System.getProperty("os.name") + "-" + System.getProperty("os.version") + "-"
+				+ System.getProperty("os.arch") + "-" + System.getProperty("java.vendor");
 
 		sockAddr = new InetSocketAddress(ip, port);
 
@@ -123,8 +125,7 @@ public class Client {
 				}
 			} catch (Throwable e) {
 			} finally {
-				if (ds != null)
-					ds.close();
+
 			}
 		}
 	}
@@ -135,20 +136,21 @@ public class Client {
 			// TODO 自動生成されたメソッド・スタブ
 			try {
 				while (true) {
-					try {
-						byte[] data = con.getProcessablePacket();
-						DatagramPacket udp = new DatagramPacket(data, data.length, con.dest);
-						ds.send(udp);
-					} catch (SocketTimeoutException ste) {
-						// ignore
-					} catch (Throwable e) {
-						e.printStackTrace();
+					for (Connection con : connections.values()) {
+						try {
+							byte[] data = con.getProcessablePacket();
+							DatagramPacket udp = new DatagramPacket(data, data.length, con.dest);
+							ds.send(udp);
+						} catch (SocketTimeoutException ste) {
+							// ignore
+						} catch (Throwable e) {
+							e.printStackTrace();
+						}
 					}
 				}
 			} catch (Throwable e) {
 			} finally {
-				if (ds != null)
-					ds.close();
+
 			}
 		}
 	}

@@ -3,7 +3,7 @@ package com.nao20010128nao.GateZenzyo.server;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
+import java.net.SocketAddress;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.HashMap;
@@ -21,9 +21,9 @@ public class Server {
 
 	String[] args;
 	String ip;
-	int port;
-	int bindPort = 19132;
-	Map<InetAddress, Connection> connections = new HashMap<>();
+	int port = 19132;
+	int bindPort = 20000;
+	Map<SocketAddress, Connection> connections = new HashMap<>();
 	DatagramSocket ds = null;
 
 	public static void main(String... args) throws SocketException {
@@ -71,7 +71,7 @@ public class Server {
 	}
 
 	public void removeEntry(Connection con) {
-		for (Map.Entry<InetAddress, Connection> ent : connections.entrySet()) {
+		for (Map.Entry<SocketAddress, Connection> ent : connections.entrySet()) {
 			if (ent.getValue() == con) {
 				connections.remove(ent.getKey());
 				return;
@@ -87,11 +87,11 @@ public class Server {
 					try {
 						DatagramPacket dp = new DatagramPacket(new byte[102400], 102400);
 						ds.receive(dp);
-						if (connections.containsKey(dp.getAddress())) {
-							connections.get(dp.getAddress()).process(dp);
+						if (connections.containsKey(dp.getSocketAddress())) {
+							connections.get(dp.getSocketAddress()).process(dp);
 						} else {
 							Connection con = new Connection(ip, port, dp.getSocketAddress(), Server.this);
-							connections.put(dp.getAddress(), con);
+							connections.put(dp.getSocketAddress(), con);
 							con.process(dp);
 						}
 					} catch (Throwable e) {
@@ -100,8 +100,7 @@ public class Server {
 				}
 			} catch (Throwable e) {
 			} finally {
-				if (ds != null)
-					ds.close();
+
 			}
 		}
 	}
@@ -112,12 +111,14 @@ public class Server {
 			// TODO 自動生成されたメソッド・スタブ
 			try {
 				while (true) {
-					for (Connection c : connections.values()) {
+					for (Map.Entry<SocketAddress, Connection> ent : connections.entrySet()) {
+						Connection c = ent.getValue();
 						try {
 							DataPacket dp = c.getProcessablePacket();
 							dp.encode();
 							byte[] data = dp.getBuffer();
 							DatagramPacket udp = new DatagramPacket(data, data.length, c.dest);
+							udp.setSocketAddress(ent.getKey());
 							ds.send(udp);
 						} catch (SocketTimeoutException ste) {
 							// ignore
@@ -128,8 +129,7 @@ public class Server {
 				}
 			} catch (Throwable e) {
 			} finally {
-				if (ds != null)
-					ds.close();
+
 			}
 		}
 	}

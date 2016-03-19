@@ -28,9 +28,15 @@ public class Connection {
 
 	byte sessionCompression;
 
+	String ip;
+	int port;
+
 	public Connection(String ip, int port, SocketAddress socketAddress, Client server) throws IOException {
+		this.ip = ip;
+		this.port = port;
+
 		dest = socketAddress;
-		ds = new DatagramSocket(new InetSocketAddress(InetAddress.getByName(ip), port));
+		ds = new DatagramSocket();
 		this.server = server;
 
 		DatagramPacket tmp;
@@ -41,6 +47,7 @@ public class Connection {
 		hcp.clientUUID = server.uuid;
 		hcp.encode();
 		tmp = new DatagramPacket(hcp.getBuffer(), hcp.getCount());
+		tmp.setSocketAddress(new InetSocketAddress(InetAddress.getByName(ip), port));
 		ds.send(tmp);
 
 		tmp = new DatagramPacket(new byte[1000], 1000);
@@ -54,6 +61,7 @@ public class Connection {
 		cip.supportedCompressions = Client.SUPPORTED_COMPRESSIONS;
 		cip.encode();
 		tmp = new DatagramPacket(cip.getBuffer(), cip.getCount());
+		tmp.setSocketAddress(new InetSocketAddress(InetAddress.getByName(ip), port));
 		ds.send(tmp);
 
 		tmp = new DatagramPacket(new byte[1000], 1000);
@@ -80,6 +88,7 @@ public class Connection {
 		mp.compressedData = Compressor.getCompressor(sessionCompression).compress(data);
 		mp.encode();
 		DatagramPacket tmp = new DatagramPacket(mp.getBuffer(), mp.getCount());
+		tmp.setSocketAddress(new InetSocketAddress(InetAddress.getByName(ip), port));
 		ds.send(tmp);
 	}
 
