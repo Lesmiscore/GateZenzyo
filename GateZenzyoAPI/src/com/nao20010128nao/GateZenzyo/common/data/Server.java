@@ -88,7 +88,7 @@ public class Server {
 						if (connections.containsKey(dp.getAddress())) {
 							connections.get(dp.getAddress()).process(dp);
 						} else {
-							Connection con = new Connection(ip, bindPort, dp.getSocketAddress(), Server.this);
+							Connection con = new Connection(ip, port, dp.getSocketAddress(), Server.this);
 							connections.put(dp.getAddress(), con);
 							con.process(dp);
 						}
