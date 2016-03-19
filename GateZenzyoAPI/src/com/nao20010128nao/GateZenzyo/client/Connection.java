@@ -7,11 +7,14 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 
+import com.nao20010128nao.GateZenzyo.common.Utils;
+import com.nao20010128nao.GateZenzyo.common.compressor.Compressor;
 import com.nao20010128nao.GateZenzyo.common.network.gate_zenzyo.ClientInfoPacket;
 import com.nao20010128nao.GateZenzyo.common.network.gate_zenzyo.ConnectionHandleDeniedPacket;
 import com.nao20010128nao.GateZenzyo.common.network.gate_zenzyo.DataPacket;
 import com.nao20010128nao.GateZenzyo.common.network.gate_zenzyo.HandleConnectionPacket;
 import com.nao20010128nao.GateZenzyo.common.network.gate_zenzyo.Info;
+import com.nao20010128nao.GateZenzyo.common.network.gate_zenzyo.MinecraftPacket;
 import com.nao20010128nao.GateZenzyo.common.network.gate_zenzyo.ServerInfoPacket;
 
 public class Connection {
@@ -72,13 +75,25 @@ public class Connection {
 			server.removeEntry(this);
 			return;
 		}
-
+		byte[] data = Utils.getUdpPacketBody(udp);
+		MinecraftPacket mp = new MinecraftPacket();
+		mp.compressedData = Compressor.getCompressor(sessionCompression).compress(data);
+		mp.encode();
+		DatagramPacket tmp = new DatagramPacket(mp.getBuffer(), mp.getCount());
+		ds.send(tmp);
 	}
 
 	public byte[] getProcessablePacket() throws IOException {
 		if (status == -1) {
 			server.removeEntry(this);
 			return null;
+		}
+		DatagramPacket dp = new DatagramPacket(new byte[102400], 102400);
+		ds.receive(dp);
+		DataPacket mp = DataPacket.createPacketForReceived(Utils.getUdpPacketBody(dp));
+		if (mp instanceof MinecraftPacket) {
+			mp.decode();
+			return Compressor.getCompressor(sessionCompression).decompress(((MinecraftPacket) mp).compressedData);
 		}
 		return null;
 	}

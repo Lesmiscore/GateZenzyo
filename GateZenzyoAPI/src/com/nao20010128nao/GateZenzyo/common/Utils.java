@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.DatagramPacket;
 
 public class Utils {
 	private Utils() {
@@ -18,6 +19,10 @@ public class Utils {
 		byte[] data = new byte[len];
 		System.arraycopy(buf, off, data, 0, len);
 		return data;
+	}
+
+	public static byte[] getUdpPacketBody(DatagramPacket dp) {
+		return trimByteArray(dp.getData(), dp.getOffset(), dp.getLength());
 	}
 
 	public static boolean writeToFile(File f, String content) {
