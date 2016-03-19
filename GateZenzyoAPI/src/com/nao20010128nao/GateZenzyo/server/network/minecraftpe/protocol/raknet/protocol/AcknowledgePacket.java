@@ -2,8 +2,8 @@ package com.nao20010128nao.GateZenzyo.server.network.minecraftpe.protocol.raknet
 
 import java.util.TreeMap;
 
-import com.nao20010128nao.GateZenzyo.Binary;
-import com.nao20010128nao.GateZenzyo.BinaryStream;
+import com.nao20010128nao.GateZenzyo.common.data.Binary;
+import com.nao20010128nao.GateZenzyo.common.data.BinaryStream;
 
 /**
  * author: MagicDroidX Nukkit Project

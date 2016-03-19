@@ -4,7 +4,7 @@ import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
-import com.nao20010128nao.GateZenzyo.Binary;
+import com.nao20010128nao.GateZenzyo.common.data.Binary;
 
 /**
  * author: MagicDroidX Nukkit Project

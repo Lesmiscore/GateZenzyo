@@ -1,4 +1,4 @@
-package com.nao20010128nao.GateZenzyo;
+package com.nao20010128nao.GateZenzyo.common.data;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;

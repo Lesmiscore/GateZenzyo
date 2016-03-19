@@ -3,7 +3,7 @@ package com.nao20010128nao.GateZenzyo.server.network.minecraftpe.protocol.raknet
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import com.nao20010128nao.GateZenzyo.Binary;
+import com.nao20010128nao.GateZenzyo.common.data.Binary;
 
 /**
  * author: MagicDroidX Nukkit Project

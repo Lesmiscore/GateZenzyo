@@ -1,6 +1,6 @@
 package com.nao20010128nao.GateZenzyo.server.network.minecraftpe.protocol;
 
-import com.nao20010128nao.GateZenzyo.BinaryStream;
+import com.nao20010128nao.GateZenzyo.common.data.BinaryStream;
 import com.nao20010128nao.GateZenzyo.server.network.minecraftpe.protocol.raknet.protocol.EncapsulatedPacket;
 
 /**
