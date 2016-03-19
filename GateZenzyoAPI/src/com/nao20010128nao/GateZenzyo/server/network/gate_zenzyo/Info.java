@@ -8,6 +8,7 @@ public class Info {
 	public static final int CLIENT_INFO = 3;
 	public static final int SERVER_INFO = 4;
 	public static final int MINECRAFT_PACKET = 5;
+	public static final int DISCONNECT_PACKET = 6;
 
 	/*-******************************************************-*/
 

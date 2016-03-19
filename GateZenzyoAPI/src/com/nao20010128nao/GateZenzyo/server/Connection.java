@@ -17,6 +17,7 @@ import com.nao20010128nao.GateZenzyo.common.compressor.Compressor;
 import com.nao20010128nao.GateZenzyo.server.network.gate_zenzyo.ClientInfoPacket;
 import com.nao20010128nao.GateZenzyo.server.network.gate_zenzyo.ConnectionHandleAcceptedPacket;
 import com.nao20010128nao.GateZenzyo.server.network.gate_zenzyo.DataPacket;
+import com.nao20010128nao.GateZenzyo.server.network.gate_zenzyo.DisconnectPacket;
 import com.nao20010128nao.GateZenzyo.server.network.gate_zenzyo.HandleConnectionPacket;
 import com.nao20010128nao.GateZenzyo.server.network.gate_zenzyo.MinecraftPacket;
 import com.nao20010128nao.GateZenzyo.server.network.gate_zenzyo.ServerInfoPacket;
@@ -99,6 +100,8 @@ public class Connection {
 				byte[] data = Compressor.getCompressor(sessionCompression)
 						.decompress(((MinecraftPacket) dp).compressedData);
 				ds.send(new DatagramPacket(data, data.length));
+			} else if (dp instanceof DisconnectPacket) {
+				status = STATUS_CLOSED;
 			} else {
 				status = -1;
 				throw new IllegalArgumentException("Unexpected packet: " + dp.getClass().getName());

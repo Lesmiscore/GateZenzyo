@@ -5,6 +5,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -117,6 +118,8 @@ public class Server {
 							byte[] data = dp.getBuffer();
 							DatagramPacket udp = new DatagramPacket(data, data.length, c.dest);
 							ds.send(udp);
+						} catch (SocketTimeoutException ste) {
+							// ignore
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
